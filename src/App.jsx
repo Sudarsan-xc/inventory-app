@@ -43,7 +43,7 @@ function App() {
     }
   };
 
-  const handleRecordSale = (id, quantity) => {
+  const handleRecordSale = (id, quantity, sellingPrice) => {
     const product = products.find(p => p.id === id);
     if (!product) return;
 
@@ -53,15 +53,26 @@ function App() {
       return;
     }
 
-    setProducts(products.map(p =>
-      p.id === id ? { ...p, sold: p.sold + quantity } : p
-    ));
+    // Use selling price, or fallback to product's base price
+    const price = sellingPrice || product.price;
+
+    setProducts(products.map(p => {
+      if (p.id === id) {
+        return {
+          ...p,
+          sold: p.sold + quantity,
+          totalRevenue: (p.totalRevenue || 0) + (quantity * price),
+          actualSellingPrice: price, // Store the actual price at which it was sold
+        };
+      }
+      return p;
+    }));
   };
 
   const metrics = {
-    totalSales: products.reduce((sum, p) => sum + (p.sold * p.price), 0),
+    totalSales: products.reduce((sum, p) => sum + (p.totalRevenue || 0), 0),
     totalCost: products.reduce((sum, p) => sum + (p.sold * p.cost), 0),
-    totalProfit: products.reduce((sum, p) => sum + ((p.price - p.cost) * p.sold), 0),
+    totalProfit: products.reduce((sum, p) => sum + ((p.totalRevenue || 0) - (p.sold * p.cost)), 0),
     totalProducts: products.length,
     totalStock: products.reduce((sum, p) => sum + p.stock, 0),
     totalSold: products.reduce((sum, p) => sum + p.sold, 0),

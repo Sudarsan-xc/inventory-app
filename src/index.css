@@ -450,6 +450,14 @@ p {
   margin-top: 0.25rem;
 }
 
+.form-help-text {
+  display: block;
+  color: #718096;
+  font-size: 0.85rem;
+  margin: 0.25rem 0 0.5rem 0;
+  font-style: italic;
+}
+
 .margin-info {
   background: white;
   padding: 1rem;
@@ -626,17 +634,49 @@ button {
   margin-bottom: 1rem;
 }
 
+.cost-info,
+.base-price-info {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.cost-info {
+  font-weight: 500;
+  color: #e53e3e;
+}
+
+.base-price-info {
+  font-weight: 500;
+  color: #667eea;
+}
+
+.sales-subtitle {
+  color: #718096;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
 .sale-input-group {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .sale-input {
   flex: 1;
+  min-width: 100px;
   padding: 0.75rem;
   border: 1px solid #cbd5e0;
   border-radius: 6px;
   font-size: 0.95rem;
+}
+
+.sale-input-group .btn-sale {
+  width: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ============================================

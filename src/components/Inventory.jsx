@@ -26,10 +26,11 @@ function Inventory({ products, onUpdate, onDelete, onRecordSale }) {
   };
 
   const handleSaleSubmit = (id) => {
-    const quantity = Number(saleData[id]) || 0;
+    const quantity = Number(saleData[id]?.quantity) || 0;
+    const price = Number(saleData[id]?.price);
     if (quantity > 0) {
-      onRecordSale(id, quantity);
-      setSaleData({ ...saleData, [id]: '' });
+      onRecordSale(id, quantity, price);
+      setSaleData({ ...saleData, [id]: { quantity: '', price: '' } });
     }
   };
 
@@ -67,7 +68,7 @@ function Inventory({ products, onUpdate, onDelete, onRecordSale }) {
             {products.map((product) => {
               const isEditing = editingId === product.id;
               const available = product.stock - product.sold;
-              const revenue = product.sold * product.price;
+              const revenue = product.totalRevenue || (product.sold * product.price);
 
               return (
                 <tr key={product.id} className={available <= 0 ? 'low-stock' : ''}>
@@ -183,6 +184,7 @@ function Inventory({ products, onUpdate, onDelete, onRecordSale }) {
 
       <div className="sales-recording">
         <h3>Record Sales</h3>
+        <p className="sales-subtitle">Enter quantity and selling price (price will use base price if left empty)</p>
         <div className="sales-grid">
           {products.map((product) => {
             const available = product.stock - product.sold;
@@ -190,14 +192,25 @@ function Inventory({ products, onUpdate, onDelete, onRecordSale }) {
               <div key={product.id} className="sales-card">
                 <h4>{product.name}</h4>
                 <p className="stock-info">Available: {available}</p>
+                <p className="cost-info">Cost Price: Rs {product.cost.toLocaleString()}</p>
+                <p className="base-price-info">Base Selling Price: Rs {product.price.toLocaleString()}</p>
                 <div className="sale-input-group">
                   <input
                     type="number"
                     min="0"
                     max={available}
-                    value={saleData[product.id] || ''}
-                    onChange={(e) => setSaleData({ ...saleData, [product.id]: e.target.value })}
+                    value={saleData[product.id]?.quantity || ''}
+                    onChange={(e) => setSaleData({ ...saleData, [product.id]: { ...saleData[product.id], quantity: e.target.value } })}
                     placeholder="Qty to sell"
+                    className="sale-input"
+                  />
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={saleData[product.id]?.price || ''}
+                    onChange={(e) => setSaleData({ ...saleData, [product.id]: { ...saleData[product.id], price: e.target.value } })}
+                    placeholder={`Selling price (or leave for Rs ${product.price})`}
                     className="sale-input"
                   />
                   <button

@@ -198,7 +198,8 @@ function AddProduct({ onAddProduct }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="price">Selling Price (Rs) *</label>
+              <label htmlFor="price">Base Selling Price (Rs) *</label>
+              <p className="form-help-text">This is the default price. You can set different prices when recording sales.</p>
               <input
                 id="price"
                 type="number"
@@ -246,7 +247,9 @@ function AddProduct({ onAddProduct }) {
       <div className="tips-section">
         <h3>💡 Tips</h3>
         <ul>
-          <li>Always set the selling price higher than cost price for profit</li>
+          <li>Cost price is fixed for each product</li>
+          <li>Base selling price can be changed per sale for flexible pricing</li>
+          <li>You can set different selling prices when recording sales</li>
           <li>Stock will be tracked automatically. Set correct initial quantity</li>
           <li>You can edit products anytime from the Inventory page</li>
           <li>All data is saved automatically to your browser</li>
